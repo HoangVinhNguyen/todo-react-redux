@@ -1,9 +1,15 @@
+import { useDispatch } from "react-redux";
+import { toggleTodoStatus } from "../../redux/actions";
 
 
-export default function TodoItem({ id, name, completed}) {
+export default function TodoItem({ id, name, completed }) {
+
+    const dispatch = useDispatch();
 
     const handleDeleteButtonClick = () => {
-        
+        dispatch(
+            toggleTodoStatus(id)
+        );
     }
 
     return (
@@ -11,11 +17,11 @@ export default function TodoItem({ id, name, completed}) {
             {name}
             {
                 !completed
-                && <button className="btn btn-warning">Update</button>
+                && <button className="btn btn-warning">Edit</button>
             }
             {
                 !completed
-                && <button className="btn btn-danger" >Delete</button>
+                && <button className="btn btn-danger" onClick={handleDeleteButtonClick}>Done</button>
             }
         </li>
     );

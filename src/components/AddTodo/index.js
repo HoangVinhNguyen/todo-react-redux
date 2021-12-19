@@ -2,13 +2,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTodo } from '../../redux/actions';
-import TodoSlice from '../TodoList/TodoSlice'
 
 export default function AddTodo() {
 
     const [todoName, setTodoName] = useState('');
 
-    const dispatch = useDispatch(TodoSlice);
+    const dispatch = useDispatch();
 
     const handleInputChange = (e) => {
         setTodoName(e.target.value);
