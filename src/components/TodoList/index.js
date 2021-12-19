@@ -1,14 +1,20 @@
 import TodoItem from "../TodoItem"
+import { todoListSelector } from "../../redux/selectors";
+import { useSelector } from 'react-redux';
 
 export default function TodoList() {
+
+    const todoList = useSelector(todoListSelector);
 
     return (
         <div className="row">
             <h3>TODO</h3>
             <ul>
-                <TodoItem key='1' name={'Learn E'} completed={false} />
-                <TodoItem key='2' name={'Learn B'} completed={false} />
-                <TodoItem key='3' name={'Learn C'} completed={true} />
+                {
+                    todoList.map(
+                        todo => <TodoItem key={todo.id} id={todo.id} name={todo.name} completed={todo.completed} />
+                    )
+                }
             </ul>
         </div>
     )
