@@ -47,11 +47,15 @@ export default function TodoItem({ id, name, completed }) {
             {// open for edit field.
                 !completed
                 && editButton
-                && <button className="btn btn-success" onClick={handleUpdateButtonClick}>Update</button>
+                && <button className="btn btn-primary" onClick={handleUpdateButtonClick}>Update</button>
             }
             {
                 !completed
-                && <button className="btn btn-danger" onClick={handleDoneButtonClick}>Done</button>
+                && <button className="btn btn-success" onClick={handleDoneButtonClick}>Done</button>
+            }
+            {
+                !completed
+                && <button className="btn btn-danger" onClick={handleDoneButtonClick}>Delete</button>
             }
         </li>
     );

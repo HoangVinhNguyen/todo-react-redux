@@ -4,6 +4,12 @@ export const addTodo = (data) => {
         payload: data
     }
 }
+export const addListTodo = (data) => {
+    return {
+        type: 'todoList/addListTodo',
+        payload: data
+    }
+}
 export const updateTodo = (data) => {
     return {
         type: 'todoList/updateTodo',
