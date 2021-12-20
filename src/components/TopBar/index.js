@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { addListTodo } from '../../redux/actions';
 import { axiosInstance } from '../../utils';
 
 
@@ -27,7 +28,8 @@ export default function TopBar() {
             localStorage.account_type = res.data.roles;
             const resTodo = await axiosInstance.get('/user/todo/' + res.data.id,
                 { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
-            console.log(resTodo.data);
+            console.log(resTodo.data.todoList);
+            dispatch(addListTodo(resTodo.data.todoList));
         } catch (error) {
             console.log(error.response.data);
         }
@@ -39,7 +41,7 @@ export default function TopBar() {
             setUsername('');
             setPassword('');
             localStorage.clear();
-            console.log(res.data);
+            dispatch(addListTodo([]));
         } catch (error) {
             console.log(error.response.data);
         }
