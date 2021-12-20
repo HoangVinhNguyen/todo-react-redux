@@ -26,10 +26,9 @@ export default function TopBar() {
             localStorage.account_refreshToken = res.data.refreshToken;
             localStorage.account_username = res.data.username;
             localStorage.account_type = res.data.roles;
-            const resTodo = await axiosInstance.get('/user/todo/' + res.data.id,
+            const resTodo = await axiosInstance.get('/user/todo/all/' + res.data.id,
                 { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
-            console.log(resTodo.data.todoList);
-            dispatch(addListTodo(resTodo.data.todoList));
+            dispatch(addListTodo(resTodo.data));
         } catch (error) {
             console.log(error.response.data);
         }

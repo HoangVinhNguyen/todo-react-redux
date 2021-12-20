@@ -15,7 +15,7 @@ const todoListReducer = (state = initState, action) => {
                 if (todo.id === action.payload.id) {
                     return {
                         ...todo,
-                        name: action.payload.nameEdit
+                        name: action.payload.name
                     }
                 }
                 return todo;
@@ -23,6 +23,14 @@ const todoListReducer = (state = initState, action) => {
         case 'todoList/toggleTodoStatus':
             return state.map(todo => todo.id === action.payload ? {...todo, completed: !todo.completed}
                 : todo);
+        case 'todoList/deleteTodo':
+            var array = [...state];
+            var index = array.findIndex(obj => obj.id === action.payload);
+            if (index !== -1) {
+              array.splice(index, 1);
+              return array;
+            }
+            return [...state];
         default:
             return state;
     }

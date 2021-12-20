@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleTodoStatus, updateTodo } from "../../redux/actions";
+import { toggleTodoStatus, updateTodo, deleteTodo, addListTodo } from "../../redux/actions";
+import { axiosInstance } from '../../utils';
 
 
 export default function TodoItem({ id, name, completed }) {
@@ -10,20 +11,66 @@ export default function TodoItem({ id, name, completed }) {
 
     const dispatch = useDispatch();
 
-    const handleDoneButtonClick = () => {
-        dispatch(
-            toggleTodoStatus(id)
-        );
+    const handleDoneButtonClick = async () => {
+        try {
+            const res = await axiosInstance.post('/user/todo/completed',
+                {
+                    userId: localStorage.account_userID,
+                    id: id,
+                    completed: !completed
+                }, { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
+            // dispatch(
+            //     toggleTodoStatus(res.data.id)
+            // );
+            const resTodo = await axiosInstance.get('/user/todo/all/' + localStorage.account_userID,
+                { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
+            dispatch(addListTodo(resTodo.data));
+        } catch (error) {
+            console.log(error.response.data);
+        }
+
+    }
+    const handleDeleteButtonClick = async () => {
+        try {
+            const res = await axiosInstance.post('/user/todo/delete',
+                {
+                    id: id,
+                }, { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
+            // dispatch(
+            //     deleteTodo(res.data.id)
+            // );
+            const resTodo = await axiosInstance.get('/user/todo/all/' + localStorage.account_userID,
+                { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
+            dispatch(addListTodo(resTodo.data));
+        } catch (error) {
+            console.log(error.response.data);
+        }
+        // dispatch(
+        //     deleteTodo(id)
+        // );
     }
     const handleEditButtonClick = () => {
         setEditButton(!editButton);
-
     }
-    const handleUpdateButtonClick = () => {
+    const handleUpdateButtonClick = async () => {
         setEditButton(!editButton);
-        dispatch(
-            updateTodo({id, nameEdit})
-        );
+        try {
+            const res = await axiosInstance.post('/user/todo/update',
+                {
+                    userId: localStorage.account_userID,
+                    id: id,
+                    name: nameEdit
+                }, { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
+            // dispatch(
+            //     updateTodo({ id: res.data.id, name: res.data.name })
+            // );
+            const resTodo = await axiosInstance.get('/user/todo/all/' + localStorage.account_userID,
+                { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
+            dispatch(addListTodo(resTodo.data));
+        } catch (error) {
+            console.log(error.response.data);
+        }
+
     }
     const handleChangeNameEdit = (e) => {
         setNameEdit(e.target.value);
@@ -32,12 +79,12 @@ export default function TodoItem({ id, name, completed }) {
     return (
         <li className={completed ? 'done' : ''}>
             {
-                !editButton 
+                !editButton
                 && name
             }
             {
-                editButton 
-                && <input type="text" className="form-control" value={nameEdit} onChange={handleChangeNameEdit}/>
+                editButton
+                && <input type="text" className="form-control" value={nameEdit} onChange={handleChangeNameEdit} />
             }
             {
                 !completed
@@ -55,7 +102,7 @@ export default function TodoItem({ id, name, completed }) {
             }
             {
                 !completed
-                && <button className="btn btn-danger" onClick={handleDoneButtonClick}>Delete</button>
+                && <button className="btn btn-danger" onClick={handleDeleteButtonClick}>Delete</button>
             }
         </li>
     );

@@ -22,7 +22,7 @@ export default function AddTodo() {
                     name: todoName,
                     completed: false,
                 }, { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
-            console.log(res.data.todoList);
+
             dispatch(addListTodo(res.data.todoList));
         } catch (error) {
             console.log(error.response.data);
