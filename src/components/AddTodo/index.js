@@ -1,7 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTodo, addListTodo } from '../../redux/actions';
+import { addListTodo } from '../../redux/actions';
 import { axiosInstance } from '../../utils';
 
 export default function AddTodo() {
@@ -16,14 +15,16 @@ export default function AddTodo() {
 
     const handleAddButtonClick = async () => {
         try {
-            const res = await axiosInstance.post('/user/todo',
+            await axiosInstance.post('/user/todo',
                 {
                     userId: localStorage.account_userID,
                     name: todoName,
                     completed: false,
                 }, { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
 
-            dispatch(addListTodo(res.data.todoList));
+                const resTodo = await axiosInstance.get('/user/todo/all/' + localStorage.account_userID,
+                { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
+            dispatch(addListTodo(resTodo.data));
         } catch (error) {
             console.log(error.response.data);
         }

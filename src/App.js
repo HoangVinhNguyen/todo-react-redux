@@ -5,7 +5,8 @@ import TopBar from './components/TopBar';
 
 function App() {
   return (
-    <div className="container">
+    document.title = 'Todo App',
+    <div id='root' className="container">
       <TopBar />
       <TodoList />
       <AddTodo />

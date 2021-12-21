@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { toggleTodoStatus, updateTodo, deleteTodo, addListTodo } from "../../redux/actions";
+import { addListTodo } from "../../redux/actions";
 import { axiosInstance } from '../../utils';
 
 
@@ -13,7 +13,7 @@ export default function TodoItem({ id, name, completed }) {
 
     const handleDoneButtonClick = async () => {
         try {
-            const res = await axiosInstance.post('/user/todo/completed',
+            await axiosInstance.post('/user/todo/completed',
                 {
                     userId: localStorage.account_userID,
                     id: id,
@@ -32,7 +32,7 @@ export default function TodoItem({ id, name, completed }) {
     }
     const handleDeleteButtonClick = async () => {
         try {
-            const res = await axiosInstance.post('/user/todo/delete',
+            await axiosInstance.post('/user/todo/delete',
                 {
                     id: id,
                 }, { headers: { "Authorization": `Bearer ${localStorage.account_accessToken}` } });
@@ -55,7 +55,7 @@ export default function TodoItem({ id, name, completed }) {
     const handleUpdateButtonClick = async () => {
         setEditButton(!editButton);
         try {
-            const res = await axiosInstance.post('/user/todo/update',
+            await axiosInstance.post('/user/todo/update',
                 {
                     userId: localStorage.account_userID,
                     id: id,
