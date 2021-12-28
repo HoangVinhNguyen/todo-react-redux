@@ -73,10 +73,6 @@ describe('Login', () => {
           }
         expect(await screen.findByTestId('title-welcome')).toHaveTextContent('Welcome vinh');
     });
-
-    it ('get all', () => {
-
-    });
 });
 
 // import configureMockStore from 'redux-mock-store'
