@@ -1,24 +1,16 @@
-import { render, RenderOptions } from '@testing-library/react';
-import { mount, shallow } from 'enzyme';
+import { render } from '@testing-library/react';
 import React from 'react';
 import { Provider } from 'react-redux';
-//import { store } from '../redux/store';
 
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-const middlewares = [ thunk ]
-const mockStore = configureMockStore(middlewares)
-const store = mockStore({todoList:[] })
-const Providers: React.FC = ({ children }) => {
+
+const Providers = ({ ui, store }) => {
   return (
     <Provider store={store}>
-      {children}
+      {ui}
     </Provider>
   );
 };
 
-export const renderWithProviders = (ui: React.ReactElement, options?: RenderOptions) => {
-  return mount(<Provider store={store}>
-    {ui}
-  </Provider>);
+export const renderWithProviders = (ui, store) => {
+  render(Providers({ ui, store }));
 }

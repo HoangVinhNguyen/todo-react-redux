@@ -1,20 +1,11 @@
 import TopBar from '.';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { renderWithProviders } from '../../helper/renderWithProviders';
-import { simulate, mount, shallow } from 'enzyme';
 import expect from 'expect'
-import sinon from 'sinon';
 
-import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import App from '../../App';
-
-
-const middlewares = [ thunk ]
-const mockStore = configureMockStore(middlewares)
-const store = mockStore({ })
 
 
 //var expect = chai.expect;
@@ -27,7 +18,7 @@ describe('Login', () => {
     //     // const handleLoginButton = sinon.spy();
     //     const password = '12345678';
     //     const username = 'vinh';
-        
+
     //     // WHEN
     //     const view = mount(<Provider store={store}> <App/> </Provider>);
     //     const fieldusername = view.find('#username-form');
@@ -54,10 +45,14 @@ describe('Login', () => {
 
     it('passes login information', async () => {
 
+        const middlewares = [thunk];
+        const mockStore = configureMockStore(middlewares);
+        const store = mockStore({});
+
         const password = '12345678';
         const username = 'vinh';
         let clicked = false;
-        render(<Provider store={store}> <TopBar/> </Provider>);
+        const view = renderWithProviders(<TopBar />, store);
         const fieldusername = screen.getByTestId('username-form');
         const fieldpassword = screen.getByTestId('password-form');
         const button = screen.getByTestId('login-button');
@@ -68,9 +63,6 @@ describe('Login', () => {
         //console.log(view.debug());
         button.addEventListener('click', () => (clicked = true));
         await fireEvent.click(button);
-        if (clicked === true) {
-            console.log("input was clicked");
-          }
         expect(await screen.findByTestId('title-welcome')).toHaveTextContent('Welcome vinh');
     });
 });
