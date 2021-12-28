@@ -11,7 +11,6 @@ export default function TopBar() {
     const [loginDone, setLoginDone] = useState(false);
     const [userLogin, setUserLogin] = useState('');
     const [userId, setUserId] = useState('');
-    const [accessToken, setAccessToken] = useState('')
     const dispatch = useDispatch();
 
     const handleLoginButton = async () => {
@@ -20,7 +19,6 @@ export default function TopBar() {
             setLoginDone(true);
             setUserLogin(res.data.username);
             setUserId(res.data.id);
-            setAccessToken(res.data.accessToken);
             localStorage.account_accessToken = res.data.accessToken;
             localStorage.account_userID = res.data.id;
             localStorage.account_refreshToken = res.data.refreshToken;
@@ -35,7 +33,7 @@ export default function TopBar() {
     }
     const handleLogoutButton = async () => {
         try {
-            const res = await axiosInstance.post('/auth/logout', { userId });
+            await axiosInstance.post('/auth/logout', { userId });
             setLoginDone(false);
             setUsername('');
             setPassword('');
@@ -56,25 +54,25 @@ export default function TopBar() {
         <div className="row d-flex">
             {
                 !loginDone
-                && <input type={"text"} className="form-control" placeholder="Username..."
+                && <input type={"text"} name="username-form" data-testid="username-form" className="form-control" placeholder="Username..."
                     value={username} onChange={handleUsernameInputChange} />
             }
             {
                 !loginDone
-                && <input type={"password"} className="form-control" placeholder="Password..."
+                && <input type={"password"} data-testid="password-form" className="form-control" placeholder="Password..."
                     value={password} onChange={handlePasswordInputChange} />
             }
             {
                 !loginDone
-                && <button className="btn btn-success" onClick={handleLoginButton}>Login</button>
+                && <button className="btn btn-success" data-testid="login-button" onClick={handleLoginButton}>Login</button>
             }
             {
                 loginDone
-                && <h4>Welcome {userLogin}</h4>
+                && <h4 data-testid="title-welcome">Welcome {userLogin}</h4>
             }
             {
                 loginDone
-                && <button className="btn btn-secondary" onClick={handleLogoutButton}>Logout</button>
+                && <button className="btn btn-secondary" data-testid="logout-button" onClick={handleLogoutButton}>Logout</button>
             }
 
         </div>
